@@ -2,6 +2,8 @@ import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
+
+
 // 1. Model Component for the Exploding Sandwich
 interface SandwichModelProps {
     scrollFraction: number;
@@ -276,7 +278,7 @@ interface SandwichSceneProps {
 
 const SandwichScene: React.FC<SandwichSceneProps> = ({ scrollFraction, mouse }) => {
     return (
-        <div className="canvas-container">
+        <div className="canvas-container" style={{ position: 'relative' }}>
             <Canvas
                 camera={{ position: [0, 0, 6.2], fov: 45 }}
                 gl={{ antialias: true, alpha: true }}

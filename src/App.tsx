@@ -309,6 +309,11 @@ const App: React.FC = () => {
         };
     }, []);
 
+    // Force R3F Canvas container to remeasure bounds during scroll-driven 3D transforms
+    useEffect(() => {
+        window.dispatchEvent(new Event('resize'));
+    }, [scrollFraction]);
+
     // Custom Cursor Tracker & Card 3D Tilt Setup
     useEffect(() => {
         const dot = document.querySelector('.custom-cursor-dot');
