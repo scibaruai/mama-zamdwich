@@ -408,7 +408,10 @@ const App: React.FC = () => {
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
 
-        const ctx = gsap.context(() => {
+        const mm = gsap.matchMedia();
+
+        // 1. Desktop Panel animation
+        mm.add("(min-width: 969px)", () => {
             const panels = gsap.utils.toArray('.panel') as HTMLElement[];
 
             // Configure initial 3D transform origin for first 2 panels
@@ -455,8 +458,23 @@ const App: React.FC = () => {
             }, 0)
             .from('.historia-text', { opacity: 0, y: 40, duration: 0.5 }, 0.3)
             .from('.historia-visual-side', { opacity: 0, scale: 0.95, duration: 0.5 }, 0.3);
+        });
 
-            // Stagger entrance transitions for other scrolling sections in normal document flow
+        // 2. Mobile adjustments: Clear GSAP applied panel rotations so they stack normally
+        mm.add("(max-width: 968px)", () => {
+            const panels = gsap.utils.toArray('.panel') as HTMLElement[];
+            panels.forEach((panel) => {
+                gsap.set(panel, {
+                    clearProps: "all"
+                });
+            });
+            gsap.set('.panels-container', {
+                clearProps: "all"
+            });
+        });
+
+        // 3. Universal animations
+        mm.add("(min-width: 0px)", () => {
             gsap.from('.proceso-card', {
                 scrollTrigger: {
                     trigger: '.proceso-section',
@@ -516,7 +534,7 @@ const App: React.FC = () => {
         }, 800);
 
         return () => {
-            ctx.revert();
+            mm.revert();
             clearTimeout(timer);
         };
     }, []);
