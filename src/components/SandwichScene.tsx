@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState, useEffect } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -276,53 +276,20 @@ interface SandwichSceneProps {
 }
 
 const SandwichScene: React.FC<SandwichSceneProps> = ({ scrollFraction, mouse }) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [size, setSize] = useState({ width: 0, height: 0 });
-
-    useEffect(() => {
-        const updateSize = () => {
-            if (containerRef.current) {
-                setSize({
-                    width: containerRef.current.offsetWidth,
-                    height: containerRef.current.offsetHeight
-                });
-            }
-        };
-
-        // Measure initially
-        updateSize();
-
-        // Listen for layout changes (which are transform-independent)
-        if (typeof ResizeObserver !== 'undefined' && containerRef.current) {
-            const observer = new ResizeObserver(() => {
-                updateSize();
-            });
-            observer.observe(containerRef.current);
-            return () => observer.disconnect();
-        } else {
-            window.addEventListener('resize', updateSize);
-            return () => window.removeEventListener('resize', updateSize);
-        }
-    }, []);
-
-    const canvasProps = {
-        camera: { position: [0, 0, 6.2], fov: 45 },
-        gl: { antialias: true, alpha: true },
-        size: size
-    } as any;
-
     return (
-        <div ref={containerRef} className="canvas-container" style={{ position: 'relative' }}>
-            {size.width > 0 && size.height > 0 && (
-                <Canvas {...canvasProps}>
-                    <ambientLight intensity={0.55} />
-                    <directionalLight position={[5, 5, 5]} intensity={1.1} castShadow />
-                    <directionalLight position={[-5, -3, 2]} intensity={0.7} color="#bf750c" />
-                    
-                    <SandwichModel scrollFraction={scrollFraction} mouse={mouse} />
-                    <DriftingParticles />
-                </Canvas>
-            )}
+        <div className="canvas-container" style={{ position: 'relative', width: '100%', height: '100%' }}>
+            <Canvas
+                shadows
+                camera={{ position: [0, 0, 6.2], fov: 45 }}
+                gl={{ antialias: true, alpha: true }}
+            >
+                <ambientLight intensity={0.55} />
+                <directionalLight position={[5, 5, 5]} intensity={1.1} castShadow />
+                <directionalLight position={[-5, -3, 2]} intensity={0.7} color="#bf750c" />
+                
+                <SandwichModel scrollFraction={scrollFraction} mouse={mouse} />
+                <DriftingParticles />
+            </Canvas>
         </div>
     );
 };
