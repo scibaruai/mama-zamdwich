@@ -145,7 +145,7 @@ const SandwichModel: React.FC<SandwichModelProps> = ({ scrollFraction, mouse }) 
     });
 
     return (
-        <group ref={groupRef} rotation={[0.6, 0.5, -0.4]}>
+        <group ref={groupRef} rotation={[0.6, 0.5, -0.4]} scale={[1.35, 1.35, 1.35]}>
             {/* UPPER BREAD (Top Baguette) */}
             <group ref={upperBreadRef} position={[0, 0, 0.45]} scale={[1.4, 1.0, 0.7]}>
                 <mesh castShadow receiveShadow>
